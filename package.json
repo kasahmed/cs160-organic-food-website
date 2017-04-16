@@ -1,0 +1,11 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "main" : "app.js",
+  "scripts" : {
+    "start" : "nodemon app.js"
+  },
+  "dependencies": {
+    "config" : "config.json"
+  }
+}

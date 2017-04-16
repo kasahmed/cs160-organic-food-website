@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Organic Store website</title>
+    <link href="/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+    <!-- Custom Theme files -->
+    <!--theme-style-->
+    <link href="/css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <!--//theme-style-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="Shopin Responsive web template, Bootstrap Web Templates, Flat Web Templates, AndroId Compatible web template,
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <!--theme-style-->
+    <link href="/css/style4.css" rel="stylesheet" type="text/css" media="all" />
+    <!--//theme-style-->
+    <script src="js/jquery.min.js"></script>
+    <!--- start-rate---->
+    <script src="js/jstarbox.js"></script>
+
+    <!---//End-rate---->
+</head>
+<body onload="displayCartOnWeb();">
+<!--header-->
+<div class="header">
+    <div class="container">
+        <div class="head">
+
+        </div>
+    </div>
+
+
+    <div class="container">
+
+        <div class="head-top">
+
+            <div class="col-sm-8 col-md-offset-2 h_menu4">
+                <nav class="navbar nav_bottom" role="navigation">
+
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header nav_2">
+                        <button type="button" class="navbar-toggle collapsed navbar-toggle1" data-toggle="collapse" data-target="#bs-megadropdown-tabs">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
+                        <ul class="nav navbar-nav nav_1">
+                            <li><a class="color" href="/">Home</a></li>
+                            <li><a class="color3" href="/trackorder">Track Orders</a></li>
+
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+
+                </nav>
+            </div>
+            <div class="col-sm-2 search-right">
+
+                <div class="cart box_1">
+                    <a href="checkout.html">
+                        <h3> <div class="total">
+                            <span class="simpleCart_total"></span></div>
+                            <img src="/images/cart.png" alt=""/></h3>
+                    </a>
+                    <p><a href="javascript:;" class="simpleCart_empty">Empty Cart</a></p>
+
+                </div>
+                <div class="clearfix"> </div>
+
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<!--banner-->
+<div class="banner-top">
+    <div class="container">
+        <h1>Checkout</h1>
+        <em></em>
+    </div>
+</div>
+
+
+<div class="check-out">
+    <div class="container">
+        <script src="/js/cookieslib.js"></script>
+        <center>
+            <h1>Cart Items:</h1>
+            <h2 id="itemsInCart" ></h2>
+        </center>
+        <center>
+            <br></br>
+            <h1>Billing Information:</h1>
+            <FORM name="checkoutForm" ACTION="" METHOD="GET" >
+                <br></br>
+                Enter Street Address (ex. 123 Main St):
+                <p></p>
+                <input id="streetAddress" type="text" placeholder="Street Address" value=""></input>
+                <br></br>
+                Enter city (ex. Santa Clara):
+                <p></p>
+                <input id="city" type="text" placeholder="City" value=""></input>
+                <br></br>
+                Enter State (ex. CA):
+                <p></p>
+                <input id="state" type="text" maxlength="2" placeholder="state" value=""></input>
+                <br></br>
+                Enter Email (ex. email@email.com):
+                <p></p>
+                <input id="email" type="text" placeholder="Email" value=""></input>
+                <br></br>
+                Enter Phone Number (ex. 1234567890):
+                <p></p>
+                <input id="phone" type="text" placeholder="Phone Number" value=""></input>
+                <br></br>
+                Enter CC number:
+                <p></p>
+                <input id="ccnum" type="text" placeholder="CC#" value=""></input>
+                <br></br>
+                <input type="submit" class="item_add" value="Checkout" onClick="return processOrder(checkoutForm, '<%=apiHost%>');" ></input>
+
+            </FORM>
+            <SCRIPT LANGUAGE="JavaScript">
+                function processOrder (form, apiHost) {
+
+                    var streetAddress = form.streetAddress.value
+                    var city = form.city.value
+                    var state = form.state.value
+                    var email = form.email.value
+                    var phone = '+1'+form.phone.value
+
+                    //check cc num
+                    var info = streetAddress.split(" ");
+                    var streetNum = info[0];
+                    var street = info[1];
+
+                    xhr = new XMLHttpRequest();
+                    var url = apiHost + "/group_one/shop/order";
+
+                    xhr.open("POST", url, true);
+                    xhr.setRequestHeader("Content-type", "application/json");
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            try {
+                                removeAllCartItems();
+                                console.log('success');
+                                console.log(xhr.responseText);
+                                alert('Order Successfully processed. You will receive a email or text message with order and tracking number. Thank you for shopping.');
+
+                                window.location = "/";
+                                return false;
+                            }
+                            catch (err)
+                            {
+                                alert('Error processing order');
+                                console.log(err);
+                                return false;
+                            }
+                        }
+                        console.log('Something is wrong here');
+                    };
+                    var items = getCartItems();
+                    console.log(JSON.stringify(items));
+                    console.log(streetNum);
+                    console.log(city);
+                    console.log(state);
+                    console.log(email);
+                    console.log(phone);
+
+                    var data = JSON.stringify({"order": JSON.stringify(items), "streetNum" : streetNum, "street" : street, "city" : city, "state" : state, "email" : email, "phoneNumber" : phone});
+                    xhr.send(data);
+                    alert('Order is processing');
+                    return false;
+
+                }
+            </SCRIPT>
+        </center>
+
+        <script src="/js/shoppingCart.js"></script>
+        <script src="/js/localstoragelib.js"></script>
+
+        <div class="bs-example4" data-example-id="simple-responsive-table">
+            <div class="table-responsive">
+                <table class="table-heading simpleCart_shelfItem">
+
+                    <% if(items.length > 0) {%>
+                    <tr>
+                        <th class="table-grid">Item</th>
+
+                        <th>Price</th>
+                        <th>QTY</th>
+                        <th>Delivery </th>
+                        <th>Subtotal</th>
+                    </tr>
+                    <% } %>
+
+                    <% for(i = 0; i < items.length; i++) { %>
+                    <tr class="cart-header">
+
+                        <td class="ring-in"><img src="<%= items[i].IMAGEURL%>" class="<%= items[i].IMAGEURL%>" alt="" height="100" width="100">
+                            <div class="sed">
+                                <h3><%= items[i].NAME%></h3>
+
+
+                            </div>
+                            <div class="clearfix"> </div>
+
+                        <td>$<%= items[i].PRICE%></td>
+                        <td><%= items[i].QTY%></td>
+                        <td>?</td>
+                        <td class="item_price">$<%= items[i].TOTAL%></td>
+                    </tr>
+                    <% } %>
+
+
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
