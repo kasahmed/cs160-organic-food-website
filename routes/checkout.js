@@ -1,16 +1,13 @@
-/**
- * Created by Kashan on 4/13/2017.
- */
+const { Router } = require('express');
+const { apiHost }= require('./config.json');
 
-var express = require('express');
-var http = require('https');
-const config = require('./config.json');
+const router = new Router();
 
-var router = express.Router();
-
-router.get('/checkout', function(req, res) {
-    res.render('checkout', {items: [], apiHost: "https://"  + config.api_host});
+router.get('/', (_, res) => {
+  res.render('checkout', {
+    apiHost,
+    items: [],
+  });
 });
-
 
 module.exports = router;

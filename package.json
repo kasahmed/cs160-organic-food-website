@@ -1,11 +1,17 @@
 {
-  "name": "application-name",
+  "private": true,
   "version": "0.0.1",
-  "main" : "app.js",
-  "scripts" : {
-    "start" : "nodemon app.js"
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
   },
   "dependencies": {
-    "config" : "config.json"
+    "express": "^4.15.2",
+    "node-fetch": "^1.6.3"
+  },
+  "devDependencies": {
+    "ejs": "^2.5.6",
+    "nodemon": "^1.11.0",
+    "reload": "^1.1.2"
   }
 }

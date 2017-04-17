@@ -1,0 +1,12 @@
+{
+  "ignore": [
+    ".git",
+    "node_modules"
+  ],
+  "watch": [
+    "public",
+    "routes",
+    "views"
+  ],
+  "ext": "js json ejs"
+}

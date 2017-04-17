@@ -1,18 +1,14 @@
-/**
- * Created by Kashan on 4/6/2017.
- */
+const { Router } = require('express');
+const { apiHost, googleMapKey: apiKey }= require('./config.json');
 
-var express = require('express');
-var http = require('https');
-const config = require('./config.json');
+const router = new Router();
 
-var router = express.Router();
-
-
-router.get('/trackorder', function(req, res) {
-
-    res.render('liveTrackTest', {calcRoute: ';', apiKey: config.googleMapKey, apiHost: "https://"  + config.api_host});
+router.get('/', (_, res) => {
+  res.render('liveTrackTest', {
+    apiHost,
+    apiKey,
+    calcRoute: ';',
+  });
 });
-
 
 module.exports = router;
