@@ -7,6 +7,10 @@ router.get('/', (_, res) => {
   res.render('checkout', {
     apiHost,
     items: [],
+
+    page: 'checkout',
+    theme: '#f44336',
+    title: 'Checkout',
   });
 });
 

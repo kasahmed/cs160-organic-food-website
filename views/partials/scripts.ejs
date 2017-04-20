@@ -1,15 +1,5 @@
 <script src="/reload/reload.js"></script>
 <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-<script>window.mdc.autoInit();</script>
-<script>
-  (() => {
-    const MDCTemporaryDrawer = mdc.drawer.MDCTemporaryDrawer;
-    const drawer = new MDCTemporaryDrawer(
-      document.querySelector('.mdc-temporary-drawer')
-    );
-    document.querySelector('.menu-button').addEventListener('click', () => {
-      drawer.open = true;
-    });
-  })();
-</script>
-<%- script %>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/pages/<%- page %>.js"></script>

@@ -1,0 +1,21 @@
+@import 'title-page.css';
+
+html {
+  background-color: #f44336
+}
+
+.container {
+  align-items: center;
+  animation: fadeIn 375ms cubic-bezier(0.4, 0, 0.2, 1);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
+  text-align: center;
+}
+
+.container > button > a {
+  color: #fff;
+  text-decoration: none;
+}

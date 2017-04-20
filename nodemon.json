@@ -9,5 +9,5 @@
     "routes",
     "views"
   ],
-  "ext": "js json ejs"
+  "ext": "css ejs js json"
 }

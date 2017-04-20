@@ -1,0 +1,31 @@
+<%- contentFor('body') %>
+<div class="mdc-grid-list mdc-grid-list--twoline-caption mdc-grid-list--with-icon-align-start">
+  <ul class="mdc-grid-list__tiles">
+    <% let index = 0; %>
+    <% for (let item of items) { %>
+      <li class="mdc-grid-tile" style="animation-delay: <%= index++ * 50 %>ms">
+        <div class="mdc-grid-tile__primary">
+          <img class="mdc-grid-tile__primary-content" src="<%= item.IMAGEURL %>">
+        </div>
+        <span class="mdc-grid-tile__secondary">
+          <i class="mdc-grid-tile__icon material-icons" data-mdc-auto-init="MDCRipple">add_shopping_cart</i>
+          <span class="mdc-grid-tile__title"><%= item.NAME %></span>
+          <span class="mdc-grid-tile__support-text">$<%= item.PRICE.toFixed(2) %></span>
+        </span>
+      </li>
+    <% } %>
+  </ul>
+</div>
+
+<button class="mdc-fab material-icons shopping-cart-fab">
+  <span class="mdc-fab__icon">shopping_cart</span>
+  <div class="expanded-content">
+    <ul class="mdc-list">
+      <% for (let i = 0; i < 10; i++) { %>
+        <li class="mdc-list-item">
+            item <%= i %>
+        </li>
+      <% } %>
+    </ul>
+  </div>
+</button>

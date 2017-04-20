@@ -1,0 +1,12 @@
+.mdc-toolbar {
+  box-shadow: none;
+}
+.menu-button {
+  display: block !important;
+}
+.mdc-temporary--drawer {
+  display: none;
+}
+.mdc-permanent-drawer {
+  display: none;
+}
