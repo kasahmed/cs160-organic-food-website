@@ -4,6 +4,7 @@
     "node_modules"
   ],
   "watch": [
+    "app.js",
     "public",
     "routes",
     "views"
