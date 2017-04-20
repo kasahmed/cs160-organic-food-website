@@ -1,5 +1,6 @@
-/**
+﻿/**
  * Created by Kashan on 4/8/2017.
+ * modified by Salman Anza
  */
 
 
@@ -14,22 +15,36 @@ var polyline = null;
 var poly2 = null;
 var speed = 0.000005, wait = 1;
 var infowindow = null;
-
+var service = new google.maps.DistanceMatrixService;
 var myPano;
 var panoClient;
 var nextPanoId;
 var timerHandle = null;
 var ONUM;
 
-function createMarker(latlng, label, html) {
-// alert("createMarker("+latlng+","+label+","+html+","+color+")");
-    var contentString = '<b>'+label+'</b><br>'+html;
-    var marker = new google.maps.Marker({
-        position: latlng,
-        map: map,
-        title: label,
-        zIndex: Math.round(latlng.lat()*-100000)<<5
-    });
+function createMarker(isTruckBool, latlng, label, html) {
+    //alert("createMarker(" + latlng + "," + label + "," + html + ","+ ","+isTruckBool+")");
+    var contentString = '<b>' + label + '</b><br>' + html;
+    var marker = null;
+    if (isTruckBool)
+    {
+        marker = new google.maps.Marker({
+            position: latlng,
+            map: map,
+            title: label,
+            icon: 'images/delivery-truck.png',
+            zIndex: Math.round(latlng.lat() * -100000) << 5
+        });
+    }
+    else {
+        marker = new google.maps.Marker({
+            position: latlng,
+            map: map,
+            title: label,
+            zIndex: Math.round(latlng.lat() * -100000) << 5
+        });
+    }
+    
     marker.myname = label;
     // gmarkers.push(marker);
 
@@ -87,6 +102,26 @@ function initialize() {
 }
 
 
+//Calculates the remaining time and distance until destianiton of the current location of the truck
+function getDist(service, map, origin, destination) {
+    service.getDistanceMatrix({
+        origins: [origin],
+        destinations: [destination],
+        travelMode: 'DRIVING',
+        unitSystem: google.maps.UnitSystem.IMPERIAL,
+        avoidHighways: false,
+        avoidTolls: false
+    }, callback);
+}
+
+function callback(response, status) {
+    if (status == 'OK') {
+        var distance = response.rows[0].elements[0].distance.text;
+        var duration = response.rows[0].elements[0].duration.text;
+        console.log("The distance is " + distance + " and the duration is " + duration + "");
+
+    }
+}
 
 var steps = []
 
@@ -121,8 +156,6 @@ function trackOrder(apiHost)
     xhr.send();
 }
 function calcRoute(address, current){
-
-
     if (timerHandle) { clearTimeout(timerHandle); }
     if (marker) { marker.setMap(null);}
     polyline.setMap(null);
@@ -174,7 +207,7 @@ function calcRoute(address, current){
                     startLocation.latlng = legs[i].start_location;
                     startLocation.address = legs[i].start_address;
                     // marker = google.maps.Marker({map:map,position: startLocation.latlng});
-                    marker = createMarker(legs[i].start_location,"start",legs[i].start_address,"green");
+                    marker = createMarker(1,legs[i].start_location,"start",legs[i].start_address,"green");
                 }
                 endLocation.latlng = legs[i].end_location;
                 endLocation.address = legs[i].end_address;
@@ -200,6 +233,8 @@ function calcRoute(address, current){
         }
     });
 }
+
+
 
 
 
@@ -237,13 +272,14 @@ function animate(d) {
         alert("You have arrived at destination");
         map.panTo(endLocation.latlng);
         marker.setPosition(endLocation.latlng);
-
+        getDist(service, map, marker.position, endLocation.address);
 
         return;
     }
     var p = polyline.GetPointAtDistance(d);
     map.panTo(p);
     marker.setPosition(p);
+    getDist(service, map, marker.position, endLocation.address);
     updatePoly(d);
     timerHandle = setTimeout("animate("+(d+step)+")", tick);
 }
