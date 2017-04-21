@@ -1,7 +1,6 @@
 window.addEventListener('load', () => {
-  const dialog = mdc.dialog.MDCDialog.attachTo(
-    document.querySelector('#shopping-cart-dialog')
-  );
+  const dialogElement = document.querySelector('#shopping-cart-dialog');
+  const dialog = mdc.dialog.MDCDialog.attachTo(dialogElement);
   dialog.listen('MDCDialog:accept', () => {
     window.location = '/checkout';
   });
@@ -10,13 +9,13 @@ window.addEventListener('load', () => {
   fab.addEventListener('click', () => {
     const { cart } = window.ShoppingCart;
 
-    const scrollable = document.querySelector('.mdc-dialog__body--scrollable');
+    const scrollable = dialogElement.querySelector('.mdc-dialog__body--scrollable');
     anime({
       targets: scrollable,
       scrollTop: 0,
     });
 
-    const productList = document.querySelector('#shopping-cart-dialog .mdc-list');
+    const productList = dialogElement.querySelector('.mdc-list');
     productList.innerHTML = Object.values(cart).map(product => `
       <li class="mdc-list-item">
         <img
@@ -40,7 +39,7 @@ window.addEventListener('load', () => {
     const totals = Object.values(cart).reduce((acc, product) => (
       acc + product.count * parseFloat(product.PRICE, 10)
     ), 0);
-    const checkoutButton = document.querySelector('.mdc-dialog__footer__button--accept');
+    const checkoutButton = dialogElement.querySelector('.mdc-dialog__footer__button--accept');
     checkoutButton.innerText = `Checkout (\$${totals.toFixed(2)})`;
 
     dialog.show();

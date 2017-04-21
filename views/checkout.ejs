@@ -1,2 +1,65 @@
 <%- contentFor('body') %>
-<h1>checkout your items here</h1>
+<div id="container">
+  <div id="checkout-stepper" class="stepper">
+    <section class="stepper__step">
+      <div class="stepper__step__connector"></div>
+      <header>
+        <span class="stepper__step__circle">1</span>
+        <span class="stepper__step__label mdc-typography--subheading1">Is your order correct?</span>
+      </header>
+      <section></section>
+      <footer>
+        <button class="mdc-button stepper__step__next-button">Next</button>
+      </footer>
+    </section>
+
+    <section class="stepper__step">
+      <header>
+        <span class="stepper__step__circle">2</span>
+        <span class="stepper__step__label mdc-typography--subheading1">Enter Payment Info</span>
+      </header>
+      <section></section>
+      <footer>
+        <button class="mdc-button stepper__step__next-button">Next</button>
+        <button class="mdc-button stepper__step__back-button">Back</button>
+      </footer>
+    </section>
+
+    <section class="stepper__step active">
+      <header>
+        <span class="stepper__step__circle">3</span>
+        <span class="stepper__step__label mdc-typography--subheading1">Enter Card Address</span>
+      </header>
+      <section></section>
+      <footer>
+        <button class="mdc-button stepper__step__next-button">Next</button>
+        <button class="mdc-button stepper__step__back-button">Back</button>
+      </footer>
+    </section>
+
+    <section class="stepper__step">
+      <header>
+        <span class="stepper__step__circle">4</span>
+        <span class="stepper__step__label mdc-typography--subheading1">Enter Delivery Address</span>
+      </header>
+      <section></section>
+      <footer>
+        <button class="mdc-button stepper__step__next-button">Next</button>
+        <button class="mdc-button stepper__step__back-button">Back</button>
+      </footer>
+    </section>
+
+
+    <section class="stepper__step">
+      <header>
+        <span class="stepper__step__circle">5</span>
+        <span class="stepper__step__label mdc-typography--subheading1">Confirm Order</span>
+      </header>
+      <section></section>
+      <footer>
+        <button class="mdc-button stepper__step__next-button">Next</button>
+        <button class="mdc-button stepper__step__back-button">Back</button>
+      </footer>
+    </section>
+  </div>
+</div>

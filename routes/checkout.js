@@ -6,7 +6,6 @@ const router = new Router();
 router.get('/', (_, res) => {
   res.render('checkout', {
     apiHost,
-    items: [],
 
     page: 'checkout',
     theme: '#f44336',
