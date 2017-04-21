@@ -1,10 +1,32 @@
+.mdc-grid-list {
+  overflow-y: auto;
+}
+
+@media (min-width: 1024px) {
+  .mdc-grid-list {
+    padding-bottom: 0;
+  }
+}
+
 .mdc-grid-list__tiles {
   justify-content: center;
 }
 
 .mdc-grid-tile {
-  animation: fadeInDown 375ms cubic-bezier(0.4, 0, 0.2, 1);
+  animation: scaleUp 375ms cubic-bezier(0.4, 0, 0.2, 1);
   animation-fill-mode: both;
+  width: 90%;
+}
+
+@media (min-width: 550px) {
+  .mdc-grid-tile {
+    width: 40%;
+  }
+}
+@media (min-width: 900px) {
+  .mdc-grid-tile {
+    width: 20%;
+  }
 }
 
 .mdc-grid-tile__secondary {

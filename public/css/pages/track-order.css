@@ -4,23 +4,3 @@
   display: flex;
   flex: 1;
 }
-
-#search-box {
-  animation: fadeInDown 375ms cubic-bezier(.4, 0, .2, 1) 400ms;
-  animation-fill-mode: both;
-
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-
-  background-color: #fff;
-  position: absolute;
-  top: 64px;
-  left: 0;
-}
-
-#order-number-input {
-  width: 100vw  ;
-  height: 64px;
-}

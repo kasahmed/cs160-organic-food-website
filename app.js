@@ -28,7 +28,6 @@ reload(server, app);
 
 app.use((_, res) => {
   res.status(404).render('404', {
-    isTitlePage: true,
     page: '404',
     theme: '#f44336',
     title: 'Nothing Found :(',

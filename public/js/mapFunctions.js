@@ -32,7 +32,7 @@ function createMarker(isTruckBool, latlng, label, html) {
             position: latlng,
             map: map,
             title: label,
-            icon: 'images/delivery-truck.png',
+            icon: '/images/delivery-truck.png',
             zIndex: Math.round(latlng.lat() * -100000) << 5
         });
     }
@@ -44,7 +44,7 @@ function createMarker(isTruckBool, latlng, label, html) {
             zIndex: Math.round(latlng.lat() * -100000) << 5
         });
     }
-    
+
     marker.myname = label;
     // gmarkers.push(marker);
 
@@ -296,6 +296,3 @@ function startAnimation() {
 
 
 //=============== ~animation funcitons =====================
-
-
-

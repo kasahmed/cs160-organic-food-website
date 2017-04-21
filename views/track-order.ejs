@@ -1,2 +1,7 @@
 <%- contentFor('body') %>
-<h1>track your order here</h1>
+<div id="map">
+</div>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=<%- apiKey %>&callback=initializeMap"></script>
+<script src="/js/mapFunctions.js"></script>
+<script src="/js/v3_epoly.js"></script>

@@ -1,5 +1,5 @@
 <%- contentFor('body') %>
-<div class="mdc-grid-list mdc-grid-list--twoline-caption mdc-grid-list--with-icon-align-start">
+<div class="mdc-grid-list mdc-grid-list--twoline-caption">
   <ul class="mdc-grid-list__tiles">
     <% let index = 0; %>
     <% for (let item of items) { %>
@@ -7,25 +7,24 @@
         <div class="mdc-grid-tile__primary">
           <img class="mdc-grid-tile__primary-content" src="<%= item.IMAGEURL %>">
         </div>
-        <span class="mdc-grid-tile__secondary">
-          <i class="mdc-grid-tile__icon material-icons" data-mdc-auto-init="MDCRipple">add_shopping_cart</i>
-          <span class="mdc-grid-tile__title"><%= item.NAME %></span>
-          <span class="mdc-grid-tile__support-text">$<%= item.PRICE.toFixed(2) %></span>
-        </span>
+        <div class="mdc-grid-tile__secondary">
+          <div class="mdc-grid-tile__secondary__info">
+            <span><%= item.NAME %></span>
+            <span>$<%= item.PRICE.toFixed(2) %></span>
+          </div>
+          <span
+            class="mdc-grid-tile__icon mdc-ripple-surface"
+            onclick="ShoppingCart.add(<%= JSON.stringify(item) %>)"
+            data-mdc-ripple-is-unbounded
+          >
+            <i class="material-icons">add_shopping_cart</i>
+          </span>
+        </div>
       </li>
     <% } %>
   </ul>
 </div>
 
-<button class="mdc-fab material-icons shopping-cart-fab">
+<button id="shopping-cart-fab" class="mdc-fab material-icons">
   <span class="mdc-fab__icon">shopping_cart</span>
-  <div class="expanded-content">
-    <ul class="mdc-list">
-      <% for (let i = 0; i < 10; i++) { %>
-        <li class="mdc-list-item">
-            item <%= i %>
-        </li>
-      <% } %>
-    </ul>
-  </div>
 </button>

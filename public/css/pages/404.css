@@ -16,17 +16,17 @@ html {
 }
 
 .container > img {
-  width: 70vw;
+  width: 70%;
 }
 
 @media (min-width: 500px) {
   .container > img {
-    width: 30vw;
+    width: 30%;
   }
 }
 @media (min-width: 1024px) {
   .container > img {
-    width: 10vw;
+    width: 20%;
   }
 }
 
