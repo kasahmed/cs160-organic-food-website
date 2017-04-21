@@ -1,4 +1,4 @@
-@import 'title-page.css';
+@import '../title-page.css';
 
 #map {
   display: flex;
