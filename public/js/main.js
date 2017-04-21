@@ -8,11 +8,11 @@ window.addEventListener('load', () => {
     drawer.open = true;
   });
 
-  [...document.querySelectorAll('.mdc-textfield')].forEach(
+  document.querySelectorAll('.mdc-textfield').forEach(
     textField => mdc.textfield.MDCTextfield.attachTo(textField)
   );
 
-  [...document.querySelectorAll('[data-mdc-ripple-is-unbounded]')].forEach(
+  document.querySelectorAll('[data-mdc-ripple-is-unbounded]').forEach(
     ripple => mdc.ripple.MDCRipple.attachTo(ripple)
   )
 });

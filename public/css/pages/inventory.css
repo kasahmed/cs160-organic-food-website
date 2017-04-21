@@ -1,5 +1,6 @@
 .mdc-grid-list {
   overflow-y: auto;
+  padding-bottom: 80%;
 }
 
 @media (min-width: 1024px) {
