@@ -34,3 +34,17 @@
   margin-left: 13px;
   margin-right: 36px;
 }
+
+@media (max-width: 1024px) {
+  .mdc-permanent-drawer {
+    display: none;
+  }
+}
+@media (min-width: 1024px) {
+  .menu-button {
+    display: none;
+  }
+  .mdc-temporary--drawer {
+    display: none;
+  }
+}

@@ -1,4 +1,4 @@
-@import 'title-page.css';
+@import '../title-page.css';
 
 html {
   background-color: #ff9800;
@@ -16,8 +16,12 @@ h1, .button-row {
   text-align: center;
 }
 
-.mdc-toolbar {
-  box-shadow: none;
+#container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
 }
 
 .button-row {
