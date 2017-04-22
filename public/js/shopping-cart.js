@@ -1,28 +1,51 @@
+//noinspection JSAnnotator
+const fileKey = 'cart';
 window.ShoppingCart = {
-  add(item) {
-    const { cart } = this;
+  add(item /*, count*/) {
 
-    if (!(item.PID in cart)) {
-      cart[item.PID] = Object.assign({}, item, {
-        count: 0,
-      });
-    }
+    const  {cart}  = this;
 
-    if (item.QTY <= 0 || cart[item.PID].count >= item.QTY) {
-      console.error('Unable to add to cart, item out of stock!');
-      return;
-    }
+    for(var i = 0; i < cart.length; i++)
+      if (cart[i].PID == item.PID && cart[i].STOREID == item.STOREID) {
+        cart[i].QTY += 1;
+        this.cart = cart;
+        return;
+      }
 
-    cart[item.PID].count++;
+    item.QTY = 1;
+    cart.push(item);
     this.cart = cart;
   },
 
   get cart() {
-    return JSON.parse(localStorage.getItem('cart') || '{}');
+    return (JSON.parse(localStorage.getItem(fileKey)) || [] );
   },
 
   set cart(cart) {
     const cartData = JSON.stringify(cart);
-    localStorage.setItem('cart', cartData);
+    localStorage.setItem(fileKey, cartData);
   },
+
+  removeAll() {
+    localStorage.removeItem(fileKey);
+  },
+
+  removeItem(item, count)
+  {
+    const  {cart}  = this;
+
+    for(var i = 0; i < cart.length; i++)
+    {
+      if (cart[i].PID == item.PID && cart[i].STOREID == item.STOREID) {
+        cart[i].QTY -= count;
+        if(cart[i].QTY <= 0)
+            cart.splice(i, 1);
+
+        this.cart = cart;
+        return true;
+      }
+    }
+
+    return false;
+  }
 };

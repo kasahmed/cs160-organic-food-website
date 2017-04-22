@@ -3,9 +3,8 @@ window.addEventListener('load', () => {
   const dialog = mdc.dialog.MDCDialog.attachTo(dialogElement);
   dialog.listen('MDCDialog:accept', () => {
     window.location = '/checkout';
-  });
-
-  const fab = document.querySelector('#shopping-cart-fab');
+})
+const fab = document.querySelector('#shopping-cart-fab');
   fab.addEventListener('click', () => {
     const { cart } = window.ShoppingCart;
 
@@ -26,10 +25,10 @@ window.addEventListener('load', () => {
           alt="${product.NAME}"
         >
           <span class="mdc-list-item__text">
-            ${product.NAME}
+            ${product.NAME} (${product.CITY})
             <span class="mdc-list-item__text__secondary">
-              ${product.count} x \$${product.PRICE.toFixed(2)} = \$${
-                (product.count * parseFloat(product.PRICE, 10)).toFixed(2)
+              ${product.QTY} x \$${product.PRICE.toFixed(2)} = \$${
+                (product.QTY * parseFloat(product.PRICE, 10)).toFixed(2)
               }
             </span>
           </span>
@@ -37,11 +36,12 @@ window.addEventListener('load', () => {
     `).join('\n');
 
     const totals = Object.values(cart).reduce((acc, product) => (
-      acc + product.count * parseFloat(product.PRICE, 10)
-    ), 0);
-    const checkoutButton = dialogElement.querySelector('.mdc-dialog__footer__button--accept');
+      acc + product.QTY * parseFloat(product.PRICE, 10)
+      ), 0
+)
+const checkoutButton = dialogElement.querySelector('.mdc-dialog__footer__button--accept');
     checkoutButton.innerText = `Checkout (\$${totals.toFixed(2)})`;
 
     dialog.show();
-  });
-});
+})
+})
