@@ -18,6 +18,16 @@
         <span class="stepper__step__circle">2</span>
         <span class="stepper__step__label mdc-typography--subheading1">Enter Payment Info</span>
       </header>
+	  	 <div class="mdc-textfield">
+        <input required pattern="[0-9]{13,16}" type="Credit Card" class="mdc-textfield__input" id="pw"
+               aria-controls="creditcard-validation-msg"
+               autocomplete="current-number">
+        <label for="creditcard" class="mdc-textfield__label">Credit Card Number</label>
+      </div>
+      <p class="mdc-textfield-helptext mdc-textfield-helptext--persistent mdc-textfield-helptext--validation-msg"
+         id="creditcard-validation-msg">
+        Just Input the card's numbers
+      </p>
       <section></section>
       <footer>
         <button class="mdc-button stepper__step__next-button">Next</button>
@@ -28,8 +38,18 @@
     <section class="stepper__step active">
       <header>
         <span class="stepper__step__circle">3</span>
-        <span class="stepper__step__label mdc-typography--subheading1">Enter Card Address</span>
+        <span class="stepper__step__label mdc-typography--subheading1">Enter Email Address</span>
       </header>
+	   	 <div class="mdc-textfield">
+        <input required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" type="Email" class="mdc-textfield__input" id="pw"
+               aria-controls="email-validation-msg"
+               autocomplete="current-email">
+        <label for="emailcard" class="mdc-textfield__label">Input Email</label>
+      </div>
+      <p class="mdc-textfield-helptext mdc-textfield-helptext--persistent mdc-textfield-helptext--validation-msg"
+         id="email-validation-msg">
+        Enter Email Address 
+      </p>
       <section></section>
       <footer>
         <button class="mdc-button stepper__step__next-button">Next</button>
@@ -40,8 +60,39 @@
     <section class="stepper__step">
       <header>
         <span class="stepper__step__circle">4</span>
-        <span class="stepper__step__label mdc-typography--subheading1">Enter Delivery Address</span>
+        <span class="stepper__step__label mdc-typography--subheading1">Delivery Address</span>
       </header>
+	    <div id="locationField">
+      <input id="autocomplete" placeholder="Enter your address"
+             onFocus="geolocate()" type="text"></input>
+    </div>
+    <table id="address">
+      <tr>
+        <td class="label">Street Address</td>
+        <td class="slimField"><input class="field" id="street_number"
+              disabled="true"></input></td>
+        <td class="wideField" colspan="2"><input class="field" id="route"
+              disabled="true"></input></td>
+      </tr>
+      <tr>
+        <td class="label">City</td>
+        <td class="wideField" colspan="3"><input class="field" id="locality"
+              disabled="true"></input></td>
+      </tr>
+      <tr>
+        <td class="label">State</td>
+        <td class="slimField"><input class="field"
+              id="administrative_area_level_1" disabled="true"></input></td>
+        <td class="label">Zip Code</td>
+        <td class="wideField"><input class="field" id="postal_code"
+              disabled="true"></input></td>
+      </tr>
+      <tr>
+        <td class="label">Country</td>
+        <td class="wideField" colspan="3"><input class="field"
+              id="country" disabled="true"></input></td>
+      </tr>
+    </table>
       <section></section>
       <footer>
         <button class="mdc-button stepper__step__next-button">Next</button>
@@ -61,5 +112,8 @@
         <button class="mdc-button stepper__step__back-button">Back</button>
       </footer>
     </section>
+	
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuOger4e1qYNxQDS_Sd28D9885IbaIkkA&libraries=places&callback=initAutocomplete"
+        async defer></script>
   </div>
 </div>
