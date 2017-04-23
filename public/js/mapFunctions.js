@@ -5,26 +5,19 @@
 
 
 var map;
-var directionDisplay;
 var directionsService;
 var stepDisplay;
-var markerArray = [];
-var position;
 var marker = null;
 var polyline = null;
 var poly2 = null;
-var speed = 0.000005, wait = 1;
 var infowindow = null;
 const distanceService = new google.maps.DistanceMatrixService;
-var myPano;
-var panoClient;
-var nextPanoId;
 var timerHandle = null;
 var ONUM;
 var TNUM;
 var hostUrl;
 const pnChannel = "map-channel";
-var pubnub = null; 
+var pubnub = null;
 var endLoc;
 
 //listener fucntion for the pubnub channel. Updates the truck marker position based on new coordinates
@@ -44,9 +37,9 @@ function createMarker(latlng, label, end) {
             title: label,
             icon: '/images/delivery-truck.png',
             zIndex: Math.round(latlng.lat() * -100000) << 5
-        }); 
+        });
     marker.myname = label;
-   
+
     google.maps.event.addListener(marker, 'click', function() {
         getDist(distanceService, map, latlng, end);
         infowindow.open(map,marker);
@@ -58,9 +51,9 @@ function createMarker(latlng, label, end) {
 function initialize(apiHost,pubKey,subKey) {
 
     hostUrl = apiHost;
-    //Sets up pubNub subscriber channel 
+    //Sets up pubNub subscriber channel
     pubnub = new PubNub({
-        publishKey: '' ,
+        publishKey: '' + pubKey,
         subscribeKey: '' + subKey
     });
     pubnub.subscribe({ channels: [pnChannel] });
@@ -127,7 +120,7 @@ function getDist(service, map, origin, destination) {
             var duration = response.rows[0].elements[0].duration.text;
             var ret = "The remaining distance is " + distance + "<br> The remaining time is " + duration + ".";
             console.log(ret);
-            infowindow.setContent(ret);      
+            infowindow.setContent(ret);
         }
     });
 }
@@ -147,7 +140,7 @@ function trackOrder(updateBool, trackNum)
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
-            try {            
+            try {
                 if (updateBool == 0)
                 {
                     var jsonArray = JSON.parse(xhr.responseText);
@@ -155,20 +148,20 @@ function trackOrder(updateBool, trackNum)
                     var current = jsonArray[0].TLAT + " " + jsonArray[0].TLONG;
                     ONUM = jsonArray[0].ONUM;
                     console.log(xhr.responseText);
-                    console.log('got Data');                
+                    console.log('got Data');
                     calcRoute(address, current);
                 }
                 else {
                     var jsonArray = JSON.parse(xhr.responseText);
                     ONUM = jsonArray[0].ONUM;
                     console.log(xhr.responseText);
-                    console.log('got Data');                   
+                    console.log('got Data');
                     var current = new google.maps.LatLng(jsonArray[0].TLAT, jsonArray
                     [0].TLONG);
                     console.log("In trackOrder, current is: " + current);
                     updateTruck(current);
                 }
-                
+
             }
             catch (err)
             {
@@ -188,15 +181,15 @@ function calcRoute(address, current){
     polyline.setMap(null);
     poly2.setMap(null);
     directionsDisplay.setMap(null);
- 
+
     var rendererOptions = {
         map: map
     }
     directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
 
-    var start = current//"San Jose, CA";//document.getElementById("start").value;
-    var end = address//"Samta Clara, CA";//document.getElementById("end").value;
-    var travelMode = google.maps.DirectionsTravelMode.DRIVING
+    var start = current;
+    var end = address;
+    var travelMode = google.maps.DirectionsTravelMode.DRIVING;
 
     var request = {
         origin: start,
@@ -230,12 +223,12 @@ function calcRoute(address, current){
                 var steps = legs[i].steps;
                 for (j=0;j<steps.length;j++) {
                     var nextSegment = steps[j].path;
-                    for (k=0;k<nextSegment.length;k++) {                      
+                    for (k=0;k<nextSegment.length;k++) {
                         bounds.extend(nextSegment[k]);
                     }
                 }
             }
-            map.setZoom(18); 
+            map.setZoom(18);
             updateTruck(null);
         }
     });
@@ -250,8 +243,8 @@ function updateTruck(current){
     else {
         console.log("current in updateTruck is: " + current);
         pubnub.publish({ channel: pnChannel, message: {lat:current.lat(), lng: current.lng()}});
-        setTimeout(trackOrder(1, TNUM), 5000);
+        setTimeout(function () { trackOrder(1, TNUM) }, 5000);
     }
 
-   
+
 }
