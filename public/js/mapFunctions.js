@@ -21,6 +21,7 @@ var panoClient;
 var nextPanoId;
 var timerHandle = null;
 var ONUM;
+var hostUrl;
 
 function createMarker(isTruckBool, latlng, label, html) {
     //alert("createMarker(" + latlng + "," + label + "," + html + ","+ ","+isTruckBool+")");
@@ -56,7 +57,9 @@ function createMarker(isTruckBool, latlng, label, html) {
 }
 
 
-function initialize() {
+function initialize(apiHost) {
+
+    hostUrl = apiHost;
 
     infowindow = new google.maps.InfoWindow(
         {
@@ -72,7 +75,7 @@ function initialize() {
         center: new google.maps.LatLng( 0, 0 ),
         mapTypeId: google.maps.MapTypeId.ROADMAP
     }
-    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    map = new google.maps.Map(document.getElementById("map"), myOptions);
 
     address = 'Santa Clara';
     geocoder = new google.maps.Geocoder();
@@ -123,14 +126,16 @@ function callback(response, status) {
     }
 }
 
-var steps = []
+var steps = [];
 
-function trackOrder(apiHost)
+function trackOrder(trackNum)
 {
-    var trackNum = document.getElementById("input_track_number").value;
+  if(!hostUrl)
+    return;
+    //var trackNum = document.getElementById("input_track_number").value;
 
     xhr = new XMLHttpRequest();
-    var url = apiHost + "/group_one/shop/track/" + trackNum;
+    const url = hostUrl + "/group_one/shop/track/" + trackNum;
 
     xhr.open("GET", url, true);
     xhr.setRequestHeader("Content-type", "application/json");
@@ -229,7 +234,7 @@ function calcRoute(address, current){
         //createMarker(endLocation.latlng,"end",endLocation.address,"red");
             map.setZoom(18);
             //startAnimation();
-            setTimeout(trackOrder, 5000);
+            //setTimeout(trackOrder, 5000);
         }
     });
 }
