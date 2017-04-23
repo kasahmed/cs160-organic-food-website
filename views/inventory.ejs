@@ -11,14 +11,26 @@
           <div class="mdc-grid-tile__secondary__info">
             <span><%= item.NAME %></span>
             <span>$<%= item.PRICE.toFixed(2) %></span>
+
+          </div>
+
+          <div align="right">
+            <span >Qty:</span>
+              <select id="quantity<%= item.PID%>" name="quantity" >
+              <% for (let i = 1; i < item.QTY; i++) { %>
+              <option value="<%= i%>"><%= i%></option>
+              <% } %>
+            </select>
           </div>
           <span
             class="mdc-grid-tile__icon mdc-ripple-surface"
-            onclick="ShoppingCart.add(<%= JSON.stringify(item) %>)"
+            onclick="if( !ShoppingCart.add(<%= JSON.stringify(item) %>, ( document.getElementById('quantity<%= item.PID%>').selectedIndex + 1) ) )
+              alert('Not enough items are in stock to fulfill this request'); document.getElementById('quantity<%= item.PID%>').selectedIndex = 0;"
             data-mdc-ripple-is-unbounded
           >
-            <i class="material-icons">add_shopping_cart</i>
+              <i  class="material-icons">add_shopping_cart</i>
           </span>
+
         </div>
       </li>
     <% } %>

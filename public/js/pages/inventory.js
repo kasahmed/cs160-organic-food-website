@@ -31,7 +31,9 @@ const fab = document.querySelector('#shopping-cart-fab');
                 (product.QTY * parseFloat(product.PRICE, 10)).toFixed(2)
               }
             </span>
+            <a  onclick="ShoppingCart.removeItem('${product.PID}','${product.STOREID}', '${product.QTY}'); return true;" align="left" style="cursor: pointer;">Remove</a>
           </span>
+          
       </li>
     `).join('\n');
 
