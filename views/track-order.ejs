@@ -1,6 +1,7 @@
 <%- contentFor('body') %>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%- apiKey %>&callback=initializeMap" ></script>
-<script src="/js/mapFunctions.js" onload="initialize('<%=apiHost%>');"></script>
+<script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.4.1.min.js"></script>
+<script src="/js/mapFunctions.js" onload="initialize('<%=apiHost%>','<%- pubKey %>','<%- subKey %>');"></script>
 <script src="/js/v3_epoly.js"></script>
 
 
@@ -8,7 +9,7 @@
 
   <input id="trackNumInput" type="text"  placeholder="Enter Track#" maxlength="9" size="10" value=""></input>
   <div class="button raised">
-    <div class="center" onclick="trackOrder(document.getElementById('trackNumInput').value)" fit>Track Order</div>
+    <div class="center" onclick="trackOrder(0, document.getElementById('trackNumInput').value)" fit>Track Order</div>
     <paper-ripple fit></paper-ripple>
   </div>
 </section>

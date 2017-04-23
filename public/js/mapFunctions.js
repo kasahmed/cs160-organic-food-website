@@ -15,51 +15,58 @@ var polyline = null;
 var poly2 = null;
 var speed = 0.000005, wait = 1;
 var infowindow = null;
-var service = new google.maps.DistanceMatrixService;
+const distanceService = new google.maps.DistanceMatrixService;
 var myPano;
 var panoClient;
 var nextPanoId;
 var timerHandle = null;
 var ONUM;
+var TNUM;
 var hostUrl;
+const pnChannel = "map-channel";
+var pubnub = null; 
+var endLoc;
 
-function createMarker(isTruckBool, latlng, label, html) {
-    //alert("createMarker(" + latlng + "," + label + "," + html + ","+ ","+isTruckBool+")");
-    var contentString = '<b>' + label + '</b><br>' + html;
-    var marker = null;
-    if (isTruckBool)
-    {
-        marker = new google.maps.Marker({
+//listener fucntion for the pubnub channel. Updates the truck marker position based on new coordinates
+function moveTruck(payload) {
+    const lat = payload.message.lat;
+    const lng = payload.message.lng;
+    console.log("The lat and lng from payload is: " + lat + ", " + lng);
+    map.setCenter({ lat: lat, lng: lng, alt: 0 });
+    marker.setPosition({ lat: lat, lng: lng, alt: 0 });
+};
+
+function createMarker(latlng, label, end) {
+    console.log("createMarker(" + latlng + "," + label+ ")");
+    marker = new google.maps.Marker({
             position: latlng,
             map: map,
             title: label,
             icon: '/images/delivery-truck.png',
             zIndex: Math.round(latlng.lat() * -100000) << 5
-        });
-    }
-    else {
-        marker = new google.maps.Marker({
-            position: latlng,
-            map: map,
-            title: label,
-            zIndex: Math.round(latlng.lat() * -100000) << 5
-        });
-    }
-
+        }); 
     marker.myname = label;
-    // gmarkers.push(marker);
-
+   
     google.maps.event.addListener(marker, 'click', function() {
-        infowindow.setContent(contentString);
+        getDist(distanceService, map, latlng, end);
         infowindow.open(map,marker);
     });
     return marker;
 }
 
 
-function initialize(apiHost) {
+function initialize(apiHost,pubKey,subKey) {
 
     hostUrl = apiHost;
+    //Sets up pubNub subscriber channel 
+    pubnub = new PubNub({
+        publishKey: '' ,
+        subscribeKey: '' + subKey
+    });
+    pubnub.subscribe({ channels: [pnChannel] });
+    pubnub.addListener({ message: moveTruck });
+
+
 
     infowindow = new google.maps.InfoWindow(
         {
@@ -114,42 +121,54 @@ function getDist(service, map, origin, destination) {
         unitSystem: google.maps.UnitSystem.IMPERIAL,
         avoidHighways: false,
         avoidTolls: false
-    }, callback);
-}
-
-function callback(response, status) {
-    if (status == 'OK') {
-        var distance = response.rows[0].elements[0].distance.text;
-        var duration = response.rows[0].elements[0].duration.text;
-        console.log("The distance is " + distance + " and the duration is " + duration + "");
-
-    }
+    }, function (response, status) {
+        if (status == 'OK') {
+            var distance = response.rows[0].elements[0].distance.text;
+            var duration = response.rows[0].elements[0].duration.text;
+            var ret = "The remaining distance is " + distance + "<br> The remaining time is " + duration + ".";
+            console.log(ret);
+            infowindow.setContent(ret);      
+        }
+    });
 }
 
 var steps = [];
 
-function trackOrder(trackNum)
+function trackOrder(updateBool, trackNum)
 {
   if(!hostUrl)
     return;
-    //var trackNum = document.getElementById("input_track_number").value;
 
+  TNUM = trackNum;
+  console.log("TNUM is: " + TNUM + " and UpdateBool is " + updateBool );
     xhr = new XMLHttpRequest();
     const url = hostUrl + "/group_one/shop/track/" + trackNum;
-
     xhr.open("GET", url, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
-            try {
-                var jsonArray = JSON.parse(xhr.responseText);
-                var address = jsonArray[0].SNUM + " " + jsonArray[0].SNAME + " " + jsonArray[0].CITY + " " + jsonArray[0].STATE;
-                var current = jsonArray[0].TLAT + " " + jsonArray[0].TLONG;
-                ONUM = jsonArray[0].ONUM;
-                console.log(xhr.responseText);
-                console.log('got Data');
-
-                calcRoute(address, current);
+            try {            
+                if (updateBool == 0)
+                {
+                    var jsonArray = JSON.parse(xhr.responseText);
+                    var address = jsonArray[0].SNUM + " " + jsonArray[0].SNAME + " " + jsonArray[0].CITY + " " + jsonArray[0].STATE;
+                    var current = jsonArray[0].TLAT + " " + jsonArray[0].TLONG;
+                    ONUM = jsonArray[0].ONUM;
+                    console.log(xhr.responseText);
+                    console.log('got Data');                
+                    calcRoute(address, current);
+                }
+                else {
+                    var jsonArray = JSON.parse(xhr.responseText);
+                    ONUM = jsonArray[0].ONUM;
+                    console.log(xhr.responseText);
+                    console.log('got Data');                   
+                    var current = new google.maps.LatLng(jsonArray[0].TLAT, jsonArray
+                    [0].TLONG);
+                    console.log("In trackOrder, current is: " + current);
+                    updateTruck(current);
+                }
+                
             }
             catch (err)
             {
@@ -160,24 +179,16 @@ function trackOrder(trackNum)
     };
     xhr.send();
 }
+
+
+
 function calcRoute(address, current){
     if (timerHandle) { clearTimeout(timerHandle); }
     if (marker) { marker.setMap(null);}
     polyline.setMap(null);
     poly2.setMap(null);
     directionsDisplay.setMap(null);
-    /*
-    polyline = new google.maps.Polyline({
-        path: [],
-        strokeColor: '#FF0000',
-        strokeWeight: 3
-    });
-    poly2 = new google.maps.Polyline({
-        path: [],
-        strokeColor: '#FF0000',
-        strokeWeight: 3
-    });*/
-    // Create a renderer for directions and bind it to the map.
+ 
     var rendererOptions = {
         map: map
     }
@@ -203,7 +214,7 @@ function calcRoute(address, current){
             var route = response.routes[0];
             startLocation = new Object();
             endLocation = new Object();
-
+            endLoc = endLocation; //so getDist() always has an ending location
             // For each route, display summary information.
             var path = response.routes[0].overview_path;
             var legs = response.routes[0].legs;
@@ -212,92 +223,35 @@ function calcRoute(address, current){
                     startLocation.latlng = legs[i].start_location;
                     startLocation.address = legs[i].start_address;
                     // marker = google.maps.Marker({map:map,position: startLocation.latlng});
-                    marker = createMarker(1,legs[i].start_location,"start",legs[i].start_address,"green");
+                    marker = createMarker(legs[i].start_location, "Your Order Is On The Way!",  legs[i].end_location);
                 }
                 endLocation.latlng = legs[i].end_location;
                 endLocation.address = legs[i].end_address;
                 var steps = legs[i].steps;
                 for (j=0;j<steps.length;j++) {
                     var nextSegment = steps[j].path;
-                    for (k=0;k<nextSegment.length;k++) {
-                        //polyline.getPath().push(nextSegment[k]);
+                    for (k=0;k<nextSegment.length;k++) {                      
                         bounds.extend(nextSegment[k]);
-
-
-
                     }
                 }
             }
-
-            //polyline.setMap(map);
-            //map.fitBounds(bounds);
-        //createMarker(endLocation.latlng,"end",endLocation.address,"red");
-            map.setZoom(18);
-            //startAnimation();
-            //setTimeout(trackOrder, 5000);
+            map.setZoom(18); 
+            updateTruck(null);
         }
     });
 }
 
-
-
-
-
-var step = 1; // 5; // metres
-var tick = 1; // milliseconds
-var eol;
-var k=0;
-var stepnum=0;
-var speed = "";
-var lastVertex = 1;
-
-
-//=============== animation functions ======================
-function updatePoly(d) {
-    // Spawn a new polyline every 20 vertices, because updating a 100-vertex poly is too slow
-    if (poly2.getPath().getLength() > 20) {
-        poly2=new google.maps.Polyline([polyline.getPath().getAt(lastVertex-1)]);
-        // map.addOverlay(poly2)
+//updates truck every five seconds
+function updateTruck(current){
+    getDist(distanceService, map, marker.position, address, endLoc);
+    if (current == null) {
+        setTimeout(trackOrder(1, TNUM), 5000);
+    }
+    else {
+        console.log("current in updateTruck is: " + current);
+        pubnub.publish({ channel: pnChannel, message: {lat:current.lat(), lng: current.lng()}});
+        setTimeout(trackOrder(1, TNUM), 5000);
     }
 
-    if (polyline.GetIndexAtDistance(d) < lastVertex+2) {
-        if (poly2.getPath().getLength()>1) {
-            poly2.getPath().removeAt(poly2.getPath().getLength()-1)
-        }
-        poly2.getPath().insertAt(poly2.getPath().getLength(),polyline.GetPointAtDistance(d));
-    } else {
-        poly2.getPath().insertAt(poly2.getPath().getLength(),endLocation.latlng);
-    }
+   
 }
-
-
-function animate(d) {
-
-    if (d>eol) {
-        alert("You have arrived at destination");
-        map.panTo(endLocation.latlng);
-        marker.setPosition(endLocation.latlng);
-        getDist(service, map, marker.position, endLocation.address);
-
-        return;
-    }
-    var p = polyline.GetPointAtDistance(d);
-    map.panTo(p);
-    marker.setPosition(p);
-    getDist(service, map, marker.position, endLocation.address);
-    updatePoly(d);
-    timerHandle = setTimeout("animate("+(d+step)+")", tick);
-}
-
-
-function startAnimation() {
-    eol=polyline.Distance();
-    map.setCenter(polyline.getPath().getAt(0));
-
-    poly2 = new google.maps.Polyline({path: [polyline.getPath().getAt(0)], strokeColor:"#0000FF", strokeWeight:10});
-
-    setTimeout("animate(50)",2000);  // Allow time for the initial map display
-}
-
-
-//=============== ~animation funcitons =====================
