@@ -1,2 +1,37 @@
 <%- contentFor('body') %>
-<h1>Here are all the orders</h1>
+<div align="center">
+  <section>
+
+    <input id="orderNumInput" type="text" hint="Enter order number" placeholder="Enter order#" maxlength="5" size="10" value=""></input>
+    <div class="button raised">
+      <div class="center" onclick="let orderNum = document.getElementById('orderNumInput').value; window.location = '/orders/' + orderNum; return false;" fit>Get Order</div>
+      <paper-ripple fit></paper-ripple>
+    </div>
+  </section>
+
+  <% if(items.length > 0) { %>
+  <table style = "width: 75%">
+    <h1>Order# <%=items[0].ONUM%></h1>
+    <tr>
+      <th scrope="col">ITEM</th>
+      <th> </th>
+      <th >PRICE</th>
+      <th >QTY</th>
+      <th >SUBTOTAL</th>
+    </tr>
+  <% for(index in items) { %>
+
+    <tr>
+      <th scrope="col" style="border-spacing: 10px"><img src="<%= items[index].IMAGEURL %>"></img> </th>
+      <th align="left"><%=items[index].NAME %></th>
+      <th >$<%=items[index].PRICE.toFixed(2) %></th>
+      <th ><%=items[index].QTY %></th>
+      <th >$<%=items[index].TOTAL.toFixed(2) %></th>
+
+    </tr>
+
+  <% }
+  }%>
+  </table>
+</div>
+
