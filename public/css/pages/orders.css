@@ -44,7 +44,13 @@ input {
   transition-delay: 0s;
 }
 
+.row {
+  color: #f44336;
+}
 img {
   width: 100px;
-
 }
+
+
+
+

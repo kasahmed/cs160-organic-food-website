@@ -16,6 +16,7 @@ router.get('/', (_, res) => {
 
 router.get('/:id', async (req, res) => {
   const { id: orderNumber } = req.params;
+
   const response = await fetch(
     `${apiHost}/group_one/shop/order/${orderNumber}`
   );

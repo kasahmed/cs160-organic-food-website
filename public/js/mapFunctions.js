@@ -243,3 +243,61 @@ function calcRoute(address, current){
 
 
 
+var step = 1; // 5; // metres
+var tick = 1; // milliseconds
+var eol;
+var k=0;
+var stepnum=0;
+var speed = "";
+var lastVertex = 1;
+
+
+//=============== animation functions ======================
+function updatePoly(d) {
+    // Spawn a new polyline every 20 vertices, because updating a 100-vertex poly is too slow
+    if (poly2.getPath().getLength() > 20) {
+        poly2=new google.maps.Polyline([polyline.getPath().getAt(lastVertex-1)]);
+        // map.addOverlay(poly2)
+    }
+
+    if (polyline.GetIndexAtDistance(d) < lastVertex+2) {
+        if (poly2.getPath().getLength()>1) {
+            poly2.getPath().removeAt(poly2.getPath().getLength()-1)
+        }
+        poly2.getPath().insertAt(poly2.getPath().getLength(),polyline.GetPointAtDistance(d));
+    } else {
+        poly2.getPath().insertAt(poly2.getPath().getLength(),endLocation.latlng);
+    }
+}
+
+
+function animate(d) {
+
+    if (d>eol) {
+        alert("You have arrived at destination");
+        map.panTo(endLocation.latlng);
+        marker.setPosition(endLocation.latlng);
+        getDist(service, map, marker.position, endLocation.address);
+
+        return;
+    }
+    var p = polyline.GetPointAtDistance(d);
+    map.panTo(p);
+    marker.setPosition(p);
+    getDist(service, map, marker.position, endLocation.address);
+    updatePoly(d);
+    timerHandle = setTimeout("animate("+(d+step)+")", tick);
+}
+
+
+function startAnimation() {
+    eol=polyline.Distance();
+    map.setCenter(polyline.getPath().getAt(0));
+
+    poly2 = new google.maps.Polyline({path: [polyline.getPath().getAt(0)], strokeColor:"#0000FF", strokeWeight:10});
+
+    setTimeout("animate(50)",2000);  // Allow time for the initial map display
+}
+
+
+//=============== ~animation funcitons =====================
