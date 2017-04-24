@@ -1,4 +1,4 @@
-<%- contentFor('body') %>
+﻿<%- contentFor('body') %>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%- apiKey %>&callback=initializeMap" ></script>
 <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.4.1.min.js"></script>
 <script src="/js/mapFunctions.js" onload="initialize('<%=apiHost%>','<%- pubKey %>','<%- subKey %>');"></script>
@@ -6,11 +6,12 @@
 
 
 <section align="center">
-
-  <input id="trackNumInput" type="text"  placeholder="Enter Track#" maxlength="9" size="10" value=""></input>
+  <div id="floating-panel">
+  <input id="trackNumInput" type="text"  placeholder="Enter Tracking Number" maxlength="9" size="13" value=""></input>
   <div class="button raised">
     <div class="center" onclick="trackOrder(0, document.getElementById('trackNumInput').value)" fit>Track Order</div>
     <paper-ripple fit></paper-ripple>
+    </div>
   </div>
 </section>
 <div id="map">

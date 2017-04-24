@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\public",
+    "\\public\\css",
+    "\\public\\css\\pages",
+    "\\public\\js",
+    "\\public\\js\\pages",
+    "\\routes",
+    "\\views"
+  ],
+  "SelectedNode": "\\public\\js\\mapFunctions.js",
+  "PreviewInSolutionExplorer": false
+}

@@ -69,11 +69,11 @@ function initialize(apiHost,pubKey,subKey) {
     // Instantiate a directions service.
     directionsService = new google.maps.DirectionsService();
 
-    // Create a map and center it on Manhattan.
+    // Create a map and center it on Santa Clara.
     var myOptions = {
         zoom: 13,
         center: new google.maps.LatLng( 0, 0 ),
-        mapTypeId: google.maps.MapTypeId.ROADMAP
+        mapTypeId: google.maps.MapTypeId.ROADMAP      
     }
     map = new google.maps.Map(document.getElementById("map"), myOptions);
 
