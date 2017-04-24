@@ -8,11 +8,15 @@ window.addEventListener('load', () => {
     drawer.open = true;
   });
 
+  document.querySelector('.drawer').querySelectorAll('.mdc-list-item').forEach(
+    listItem => mdc.ripple.MDCRipple.attachTo(listItem)
+  );
+
+  document.querySelectorAll('.mdc-button').forEach(
+    button => mdc.ripple.MDCRipple.attachTo(button)
+  );
+
   document.querySelectorAll('.mdc-textfield').forEach(
     textField => mdc.textfield.MDCTextfield.attachTo(textField)
   );
-
-  document.querySelectorAll('[data-mdc-ripple-is-unbounded]').forEach(
-    ripple => mdc.ripple.MDCRipple.attachTo(ripple)
-  )
 });
