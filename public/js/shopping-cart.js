@@ -1,56 +1,50 @@
-//noinspection JSAnnotator
-const fileKey = 'cart';
 window.ShoppingCart = {
-  add(item , count) {
-
-    const  {cart}  = this;
-
-    for(var i = 0; i < cart.length; i++)
-      if (cart[i].PID == item.PID && cart[i].STOREID == item.STOREID) {
-        const newQty = cart[i].QTY + count;
-        if(item.QTY < newQty)
-          return false;
-        cart[i].QTY += count;
-        return this.cart = cart;
-      }
-
-    if(item.QTY < count)
-      return false;
-
-    item.QTY = count;
-    cart.push(item);
-    return this.cart = cart;
-  },
+  localStorageKey: 'cart',
 
   get cart() {
-    return (JSON.parse(localStorage.getItem(fileKey)) || [] );
+    return JSON.parse(
+      localStorage.getItem(this.localStorageKey) || '{}'
+    );
   },
 
   set cart(cart) {
-    const cartData = JSON.stringify(cart);
-    localStorage.setItem(fileKey, cartData);
+    localStorage.setItem(
+      this.localStorageKey,
+      JSON.stringify(cart)
+    );
   },
 
-  removeAll() {
-    localStorage.removeItem(fileKey);
+  get total() {
+    return _.reduce(
+      this.cart,
+      (result, store) => result + _.reduce(
+        store,
+        (result, { count, item }) => result + count * item.PRICE,
+        0
+      ),
+      0
+    );
   },
 
-  removeItem(itemPid, itemStoreId, count)
-  {
-    const  {cart}  = this;
-
-    for(var i = 0; i < cart.length; i++)
-    {
-      if (cart[i].PID == itemPid && cart[i].STOREID == itemStoreId) {
-        cart[i].QTY -= count;
-        if(cart[i].QTY <= 0)
-            cart.splice(i, 1);
-
-        this.cart = cart;
-        return true;
-      }
+  add(item) {
+    const { cart } = this;
+    if (!cart[item.STOREID]) {
+      cart[item.STOREID] = {};
+    };
+    if (!cart[item.STOREID][item.PID]) {
+      cart[item.STOREID][item.PID] = {
+        item,
+        count: 0,
+      };
     }
+    cart[item.STOREID][item.PID].count++;
+    this.cart = cart;
+  },
 
-    return false;
-  }
+  clear() {
+    localStorage.removeItem(this.localStorageKey);
+  },
+
+  remove({ productId, storeId }) {
+  },
 };
