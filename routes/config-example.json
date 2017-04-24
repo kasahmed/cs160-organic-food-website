@@ -1,4 +1,6 @@
 {
   "apiHost": "",
-  "googleMapKey": ""
+  "googleMapKey": "",
+  "pubPublishKey" : "",
+  "pubSubscribeKey" : ""
 }
