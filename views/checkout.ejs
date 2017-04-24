@@ -1,4 +1,84 @@
 <%- contentFor('body') %>
+
+<body onload="ShoppingCart.displayCartOnWeb();" >
+<div id='body' style="overflow-y: auto;">
+  <h1 align="center">Is your Order Correct?</h1>
+  <table id="shoppingTable" style="width: 75%;" align="center" >
+
+  </table>
+
+
+<br></br>
+  <div id='billingDiv' align="center" style="display : false">
+    <h1 align="center">Enter Billing Info:</h1>
+    <FORM name="checkoutForm" ACTION="" METHOD="GET" >
+      <br></br>
+      Enter Street Address (ex. 123 Main St):
+      <p></p>
+
+      <!-- <input id="streetAddress" type="text" placeholder="Street Address" value="" class="mdc-textfield__input"></input> -->
+      <div class="mdc-textfield">
+        <input id="streetAddress"  required pattern="[1-9]+[A-Z, a-z]+" type="Street Address" class="mdc-textfield__input"
+               >
+        <label for="streetAddress" class="mdc-textfield__label">Street Address</label>
+      </div>
+      <br></br>
+      Enter city (ex. Santa Clara):
+      <p></p>
+      <!-- <input id="city" type="text" placeholder="City" value=""></input> -->
+      <div class="mdc-textfield" >
+        <input id="city" required pattern="[A-Z, a-z]+" type="CITY" class="mdc-textfield__input"
+        >
+        <label for="city" class="mdc-textfield__label">City</label>
+      </div>
+      <br></br>
+      Enter State (ex. CA):
+      <p></p>
+      <!-- <input id="state" type="text" maxlength="2" placeholder="state" value=""></input> -->
+      <div class="mdc-textfield">
+        <input id="state" required pattern="[A-Z][A-Z]" type="State" class="mdc-textfield__input"
+               >
+        <label for="state" class="mdc-textfield__label">State</label>
+      </div>
+      <br></br>
+     Enter Email (ex. email@email.com):
+      <p></p>
+
+      <!-- <input id="email" type="text" placeholder="Email" value=""></input> -->
+      <div class="mdc-textfield">
+        <input id="emailInput" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" type="Email" class="mdc-textfield__input"
+               aria-controls="email-validation-msg"
+               autocomplete="current-email">
+        <label for="emailInput" class="mdc-textfield__label">Email</label>
+      </div>
+      <br></br>
+      Enter Phone Number (ex. 1234567890):
+      <p></p>
+      <!-- <input id="phone" type="text" placeholder="Phone Number" value=""></input> -->
+      <div class="mdc-textfield">
+        <input id="phone" required pattern="[0-9]{10}" type="State" class="mdc-textfield__input"
+        >
+        <label for="phone" class="mdc-textfield__label">Phone number</label>
+      </div>
+      <br></br>
+      Enter CC number:
+      <p></p>
+      <div class="mdc-textfield">
+        <input id="ccnum" required pattern="[0-9]{13,16}" type="Credit Card" class="mdc-textfield__input"
+               aria-controls="creditcard-validation-msg"
+               autocomplete="current-number">
+        <label for="creditcard" class="mdc-textfield__label">Credit Card Number</label>
+      </div>
+      <!-- <input id="ccnum" type="text" placeholder="CC#" value=""></input> -->
+      <br></br>
+      <input type="submit" class="item_add" value="Checkout" onClick="ShoppingCart.checkout(checkoutForm, '<%=apiHost%>', ShoppingCart.removeAll); return false;" ></input>
+
+    </FORM>
+  </div>
+</div>
+</body>
+
+<!--
 <div id="container">
   <div id="checkout-stepper" class="stepper">
     <section class="stepper__step active">
@@ -48,7 +128,7 @@
       </div>
       <p class="mdc-textfield-helptext mdc-textfield-helptext--persistent mdc-textfield-helptext--validation-msg"
          id="email-validation-msg">
-        Enter Email Address 
+        Enter Email Address
       </p>
       <section></section>
       <footer>
@@ -112,8 +192,9 @@
         <button class="mdc-button stepper__step__back-button">Back</button>
       </footer>
     </section>
-	
+
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuOger4e1qYNxQDS_Sd28D9885IbaIkkA&libraries=places&callback=initAutocomplete"
         async defer></script>
   </div>
 </div>
+--->
