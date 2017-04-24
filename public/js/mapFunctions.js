@@ -144,7 +144,7 @@ function trackOrder(updateBool, trackNum)
                 if (updateBool == 0)
                 {
                     var jsonArray = JSON.parse(xhr.responseText);
-                    var address = jsonArray[0].SNUM + " " + jsonArray[0].SNAME + " " + jsonArray[0].CITY + " " + jsonArray[0].STATE;
+                    var address = jsonArray[0].SADDRESS + " " + jsonArray[0].CITY + " " + jsonArray[0].STATE;
                     var current = jsonArray[0].TLAT + " " + jsonArray[0].TLONG;
                     ONUM = jsonArray[0].ONUM;
                     console.log(xhr.responseText);
