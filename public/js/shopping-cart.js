@@ -99,6 +99,7 @@ window.ShoppingCart = {
     const state = form.state.value;
     const email = form.emailInput.value;
     const phone = '+1'+form.phone.value;
+    const card = '' + form.ccnum.value;
 
 
     //alert('Over here man');
@@ -115,16 +116,20 @@ window.ShoppingCart = {
 
           if(JSON.parse(xhr.responseText)  != "success") {
             console.log(JSON.parse(xhr.responseText));
+            alert(JSON.parse(xhr.responseText).errorMessage);
+            /*
             alert('Something went wrong processing your order, please check to see if the QTY of the item is in stock ' +
               'at the desired location.');
+              */
 
             return false;
           }
 
           alert('Order Successfully processed. You will receive a email or text message with order and tracking number. Thank you for shopping.');
           remove();
-          return true;
           window.location = "/";
+          return true;
+
 
         }
         catch (err)
@@ -138,7 +143,7 @@ window.ShoppingCart = {
     };
 
 
-    const data = JSON.stringify({"order": JSON.stringify(cart), "streetAddress" : streetAddress, "city" : city, "state" : state, "email" : email, "phoneNumber" : phone});
+    const data = JSON.stringify({"order": JSON.stringify(cart), "streetAddress" : streetAddress, "city" : city, "state" : state, "email" : email, "phoneNumber" : phone, "creditCardNumber" : card});
     console.log(data);
     xhr.send(data);
     return true;
@@ -146,3 +151,15 @@ window.ShoppingCart = {
 
 
 };
+
+function isAdressValid(address){
+  var geocoder = new google.maps.Geocoder();
+  geocoder.geocode({'address':address},function(results,status){
+    if(status !='OK'){
+      return false;
+    }
+    else{
+      return true;
+    }
+  });
+}
