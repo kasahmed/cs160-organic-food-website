@@ -3,6 +3,13 @@ const fileKey = 'cart';
 window.ShoppingCart = {
   add(item , count) {
 
+
+    console.log(item.QTY);
+    if(item.QTY <= 0){
+
+        //alert('This item is currently not in stock, please check back to see if it is in stock');
+        return false;
+    }
     const  {cart}  = this;
 
     for(var i = 0; i < cart.length; i++)
